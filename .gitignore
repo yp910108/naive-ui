@@ -10,7 +10,7 @@ package-lock.json
 playground/temp
 yarn.lock
 .DS_Store
-.vscode
+# .vscode
 .idea
 .pulsar
 *.swp

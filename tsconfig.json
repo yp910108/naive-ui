@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": ["ESNext", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "types": [],
+    "strict": true,
+    "noUnusedLocals": true,
+    "declaration": true,
+    "outDir": "./build/dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
