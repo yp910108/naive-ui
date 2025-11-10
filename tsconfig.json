@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES6",
     "jsx": "preserve",
+    // 配合 eslint.config.js 中 'unused-imports/no-unused-imports': 'off' 使用
     "jsxFactory": "h",
     "lib": ["ESNext", "DOM"],
     "module": "ESNext",

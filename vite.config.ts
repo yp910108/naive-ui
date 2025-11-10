@@ -4,16 +4,17 @@ import { createDemoPlugin } from './build/vite-plugin-demo'
 
 export default defineConfig({
   plugins: createDemoPlugin(),
-  optimizeDeps: {
-    exclude: ['__INDEX__'],
-  },
-  server: {
-    port: 1527,
-  },
   resolve: {
     alias: {
       'naive-ui': fileURLToPath(new URL('./src', import.meta.url)),
     },
+  },
+  server: {
+    port: 1527,
+  },
+  optimizeDeps: {
+    include: ['vue', 'vue-router'],
+    exclude: ['__INDEX__'],
   },
   esbuild: {
     jsx: 'transform',
