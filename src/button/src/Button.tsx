@@ -1,4 +1,9 @@
 import { defineComponent, h } from 'vue'
+import { useTheme } from '../../_mixins'
+
+export const buttonProps = {
+  ...useTheme.props,
+}
 
 const Button = defineComponent({
   name: 'Button',
