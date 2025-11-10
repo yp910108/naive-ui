@@ -5,7 +5,7 @@ export const demoIndexTransFormPlugin: Plugin = {
   transformIndexHtml: {
     order: 'pre',
     handler(code: string) {
-      return code.replace(/__INDEX__/, 'demo/index.dev.js')
+      return code.replace(/__INDEX__/, 'demo/index.dev.ts')
     },
   },
 }

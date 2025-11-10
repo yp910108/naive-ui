@@ -4,11 +4,22 @@
     "start": "pnpm dev",
     "dev": "vite --force"
   },
+  "dependencies": {
+    "@css-render/plugin-bem": "^0.15.14",
+    "@css-render/vue3-ssr": "^0.15.14",
+    "@types/lodash-es": "4.17.12",
+    "css-render": "0.15.14",
+    "date-fns": "4.1.0",
+    "highlight.js": "^11.11.1",
+    "lodash-es": "4.17.21",
+    "seemly": "0.3.10"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "6.2.0",
     "@types/node": "24.9.1",
     "@vitejs/plugin-vue": "6.0.1",
     "eslint": "9.39.1",
+    "katex": "^0.16.25",
     "typescript": "5.9.3",
     "vite": "7.1.12",
     "vue": "3.5.22",

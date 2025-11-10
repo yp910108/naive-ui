@@ -6,4 +6,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['__INDEX__'],
   },
+  server: {
+    port: 1527,
+  },
 })
