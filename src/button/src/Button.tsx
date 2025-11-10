@@ -1,8 +1,10 @@
+import type { ThemeProps } from '../../_mixins'
+import type { ButtonTheme } from '../styles'
 import { defineComponent, h } from 'vue'
 import { useTheme } from '../../_mixins'
 
 export const buttonProps = {
-  ...useTheme.props,
+  ...(useTheme.props as ThemeProps<ButtonTheme>),
 }
 
 const Button = defineComponent({
