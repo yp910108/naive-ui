@@ -1,5 +1,5 @@
 <template>
   <div class="div">
-    this is home.
+    <n-button>xxx</n-button>
   </div>
 </template>
