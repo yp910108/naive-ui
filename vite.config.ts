@@ -3,8 +3,6 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import { createDemoPlugin } from './build/vite-plugin-demo'
 
-console.log(process.env.NODE_ENV)
-
 export default defineConfig({
   server: {
     port: 1527,
