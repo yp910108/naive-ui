@@ -1,4 +1,4 @@
-<script   lang="ts">
+<script lang="ts">
 import { defineComponent } from 'vue'
 import Site from './Site.vue'
 import { siteSetup } from './store'
