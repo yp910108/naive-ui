@@ -1,5 +1,7 @@
 <template>
   <div class="div">
-    <n-button>xxx</n-button>
+    <n-button dashed>
+      xxx
+    </n-button>
   </div>
 </template>

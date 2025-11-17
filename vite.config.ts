@@ -1,16 +1,22 @@
+import process from 'node:process'
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import { createDemoPlugin } from './build/vite-plugin-demo'
 
+console.log(process.env.NODE_ENV)
+
 export default defineConfig({
+  server: {
+    port: 1527,
+  },
   plugins: createDemoPlugin(),
   resolve: {
     alias: {
       'naive-ui': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  server: {
-    port: 1527,
+  define: {
+    __DEV__: process.env.NODE_ENV !== 'production',
   },
   optimizeDeps: {
     include: ['vue', 'vue-router'],
