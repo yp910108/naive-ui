@@ -3,8 +3,9 @@ import type { ThemeProps } from '../../_mixins'
 import type { MaybeArray } from '../../_utils'
 import type { ButtonTheme } from '../styles'
 import type { Size, Type } from './interface'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, watchEffect } from 'vue'
 import { useTheme } from '../../_mixins'
+import { warnOnce } from '../../_utils'
 import { isSafari } from '../../_utils/env/browser'
 
 export const buttonProps = {
@@ -62,8 +63,18 @@ export const buttonProps = {
 
 const Button = defineComponent({
   name: 'Button',
-  setup() {
-
+  props: buttonProps,
+  setup(props) {
+    if (__DEV__) {
+      watchEffect(() => {
+        const { dashed, ghost, text, secondary, tertiary, quaternary } = props
+        if (
+          (dashed || ghost || text)
+          && (secondary || tertiary || quaternary)) {
+          warnOnce('button', '`dashed`, `ghost` and `text` props can\'t be used along with `secondary`, `tertiary` and `quaternary` props.')
+        }
+      })
+    }
   },
   render() {
     return <div>this is button.</div>
