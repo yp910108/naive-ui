@@ -11,6 +11,7 @@
       "naive-ui": ["./src"]
     },
     "resolveJsonModule": true,
+    // 确保在 .tsx 文件中不会报错
     "types": ["vue/jsx"],
     "strict": true,
     "noUnusedLocals": true,
