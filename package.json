@@ -2,7 +2,9 @@
   "type": "module",
   "scripts": {
     "start": "pnpm dev",
-    "dev": "vite --force"
+    "dev": "vite --force",
+    "lint": "eslint . --fix",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@css-render/plugin-bem": "^0.15.14",
