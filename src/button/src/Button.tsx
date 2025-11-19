@@ -4,7 +4,7 @@ import type { MaybeArray } from '../../_utils'
 import type { ButtonTheme } from '../styles'
 import type { Size, Type } from './interface'
 import { defineComponent, h, ref, watchEffect } from 'vue'
-import { useTheme } from '../../_mixins'
+import { useConfig, useTheme } from '../../_mixins'
 import { warnOnce } from '../../_utils'
 import { isSafari } from '../../_utils/env/browser'
 
@@ -75,6 +75,8 @@ const Button = defineComponent({
         }
       })
       const selfElRef = ref<HTMLElement | null>(null)
+      const { inlineThemeDisabled, mergedClsPrefixRef, mergedRtlRef }
+        = useConfig(props)
 
       return { selfElRef }
     }
