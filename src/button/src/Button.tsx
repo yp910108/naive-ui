@@ -3,7 +3,7 @@ import type { ThemeProps } from '../../_mixins'
 import type { MaybeArray } from '../../_utils'
 import type { ButtonTheme } from '../styles'
 import type { Size, Type } from './interface'
-import { defineComponent, h, watchEffect } from 'vue'
+import { defineComponent, h, ref, watchEffect } from 'vue'
 import { useTheme } from '../../_mixins'
 import { warnOnce } from '../../_utils'
 import { isSafari } from '../../_utils/env/browser'
@@ -74,10 +74,14 @@ const Button = defineComponent({
           warnOnce('button', '`dashed`, `ghost` and `text` props can\'t be used along with `secondary`, `tertiary` and `quaternary` props.')
         }
       })
+      const selfElRef = ref<HTMLElement | null>(null)
+
+      return { selfElRef }
     }
   },
   render() {
-    return <div>this is button.</div>
+    const { tag: Component } = this
+    return <Component ref="selfElRef">this is button.</Component>
   },
 })
 
