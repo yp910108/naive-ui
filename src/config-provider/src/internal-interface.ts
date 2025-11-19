@@ -20,6 +20,8 @@ export interface ConfigProviderInjection {
   mergedClsPrefixRef: Ref<string>
   mergedBorderedRef: Ref<boolean | undefined>
   mergedRtlRef: Ref<RtlEnabledState | undefined>
+  mergedThemeHashRef: Ref<string>
   // non-reactive
   inlineThemeDisabled: boolean
+  styleMountTarget: ParentNode | undefined
 }
