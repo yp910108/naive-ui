@@ -1,5 +1,13 @@
-import type { PropType } from 'vue'
+import type { CNode } from 'css-render'
+import type { ComputedRef, PropType, Ref } from 'vue'
 import type { ThemeCommonVars } from '../_styles/common'
+import type { GlobalTheme } from '../config-provider'
+import { useSsrAdapter } from '@css-render/vue3-ssr'
+import { merge } from 'lodash-es'
+import { computed, inject, onBeforeMount } from 'vue'
+import globalStyle from '../_styles/global/index.cssr'
+import { configProviderInjectionKey } from '../config-provider/src/context'
+import { cssrAnchorMetaName } from './common'
 
 export interface Theme<N, T = Record<string, unknown>, R = any> {
   name: N
@@ -30,10 +38,130 @@ export type ExtractPeerOverrides<T>
       }
     : T
 
+// V is peers theme
+export type ExtractMergedPeerOverrides<T>
+  = T extends Theme<unknown, unknown, infer V>
+    ? {
+        [k in keyof V]?: ExtractPeerOverrides<V[k]>
+      }
+    : T
+
 export type ExtractThemeOverrides<T> = Partial<ExtractThemeVars<T>>
   & ExtractPeerOverrides<T> & { common?: Partial<ThemeCommonVars> }
 
-function useTheme() {}
+type UseThemeProps<T> = Readonly<{
+  theme?: T | undefined
+  themeOverrides?: ExtractThemeOverrides<T>
+  builtinThemeOverrides?: ExtractThemeOverrides<T>
+}>
+
+export type MergedTheme<T>
+  = T extends Theme<unknown, infer V, infer W>
+    ? {
+        common: ThemeCommonVars
+        self: V
+        peers: W
+        peerOverrides: ExtractMergedPeerOverrides<T>
+      }
+    : T
+
+function useTheme<N, T, R>(
+  resolveId: Exclude<keyof GlobalTheme, 'common' | 'name'>,
+  mountId: string,
+  style: CNode | undefined,
+  defaultTheme: Theme<N, T, R>,
+  props: UseThemeProps<Theme<N, T, R>>,
+  clsPrefixRef: Ref<string | undefined> | undefined,
+): ComputedRef<MergedTheme<Theme<N, T, R>>> {
+  const ssrAdapter = useSsrAdapter()
+  const NConfigProvider = inject(configProviderInjectionKey, null)
+  if (style) {
+    const mountStyle = (): void => {
+      const clsPrefix = clsPrefixRef?.value
+      style.mount({
+        id: clsPrefix === undefined ? mountId : clsPrefix + mountId,
+        head: true,
+        props: {
+          bPrefix: clsPrefix ? `.${clsPrefix}-` : undefined,
+        },
+        anchorMetaName: cssrAnchorMetaName,
+        ssr: ssrAdapter,
+        parent: NConfigProvider?.styleMountTarget,
+      })
+      if (!NConfigProvider?.preflightStyleDisabled) {
+        globalStyle.mount({
+          id: 'n-global',
+          head: true,
+          anchorMetaName: cssrAnchorMetaName,
+          ssr: ssrAdapter,
+          parent: NConfigProvider?.styleMountTarget,
+        })
+      }
+    }
+    if (ssrAdapter) {
+      mountStyle()
+    }
+    else {
+      onBeforeMount(mountStyle)
+    }
+  }
+  const mergedThemeRef = computed(() => {
+    // keep props to make theme overrideable
+    const {
+      theme: { common: selfCommon, self, peers = {} } = {},
+      themeOverrides: selfOverrides = {} as ExtractThemeOverrides<
+        Theme<N, T, R>
+      >,
+      builtinThemeOverrides: builtinOverrides = {} as ExtractThemeOverrides<
+        Theme<N, T, R>
+      >,
+    } = props
+    const { common: selfCommonOverrides, peers: peersOverrides } = selfOverrides
+    const {
+      common: globalCommon = undefined,
+      [resolveId]: {
+        common: globalSelfCommon = undefined,
+        self: globalSelf = undefined,
+        peers: globalPeers = {},
+      } = {},
+    } = NConfigProvider?.mergedThemeRef.value || {}
+    const {
+      common: globalCommonOverrides = undefined,
+      [resolveId]: globalSelfOverrides = {},
+    } = NConfigProvider?.mergedThemeOverridesRef.value || {}
+    const {
+      common: globalSelfCommonOverrides,
+      peers: globalPeersOverrides = {},
+    } = globalSelfOverrides
+    const mergedCommon = merge(
+      {},
+      selfCommon || globalSelfCommon || globalCommon || defaultTheme.common,
+      globalCommonOverrides,
+      globalSelfCommonOverrides,
+      selfCommonOverrides,
+    )
+    const mergedSelf = merge(
+      // {}, executed every time, no need for empty obj
+      (self || globalSelf || defaultTheme.self)?.(mergedCommon) as T,
+      builtinOverrides,
+      globalSelfOverrides,
+      selfOverrides,
+    )
+    return {
+      common: mergedCommon,
+      self: mergedSelf,
+      peers: merge({}, defaultTheme.peers, globalPeers, peers),
+      peerOverrides: merge(
+        {},
+        builtinOverrides.peers,
+        globalPeersOverrides,
+        peersOverrides,
+      ),
+    }
+  })
+
+  return mergedThemeRef
+}
 
 useTheme.props = {
   theme: Object,

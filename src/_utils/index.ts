@@ -1,3 +1,5 @@
+export { color2Class } from './css'
+export { createKey } from './cssr'
 export { isBrowser } from './env/is-browser'
 export { throwError, warn, warnOnce } from './naive'
 export { createInjectionKey } from './vue'
