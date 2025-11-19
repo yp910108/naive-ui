@@ -12,6 +12,7 @@ export interface RtlItem {
   style: CNode
   peers?: RtlItem[]
 }
+export type RtlProp = RtlItem[]
 
 export type RtlEnabledState = Partial<
   Record<keyof GlobalThemeWithoutCommon, RtlItem>

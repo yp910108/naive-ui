@@ -416,11 +416,15 @@ const Button = defineComponent({
         )
       : undefined
 
-    return { selfElRef, themeClass: themeClassHandle?.themeClass }
+    return {
+      selfElRef,
+      themeClass: themeClassHandle?.themeClass,
+      onRender: themeClassHandle?.onRender,
+    }
   },
   render() {
-    const { tag: Component } = this
-
+    const { tag: Component, onRender } = this
+    onRender?.()
     return <Component ref="selfElRef" class={this.themeClass}>this is button.</Component>
   },
 })
