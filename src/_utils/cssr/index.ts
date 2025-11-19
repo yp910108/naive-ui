@@ -1,5 +1,5 @@
 import { plugin as BemPlugin } from '@css-render/plugin-bem'
-import CssRender from 'css-render'
+import { CssRender } from 'css-render'
 
 const namespace = 'n'
 const prefix = `.${namespace}-`
